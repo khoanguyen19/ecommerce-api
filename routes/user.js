@@ -4,7 +4,7 @@ const { authorizeUser, authorizeAdmin } = require("../middlewares/verifyToken");
 const CryptoJS = require("crypto-js");
 
 // CREATE
-router.post("/", authorizeAdmin, async (req, res) => {
+router.post("/", async (req, res) => {
   req.body.password = CryptoJS.AES.encrypt(
     req.body.password,
     process.env.SEC_PASS
@@ -19,7 +19,7 @@ router.post("/", authorizeAdmin, async (req, res) => {
 });
 
 // UPDATE
-router.put("/:id", authorizeUser, async (req, res) => {
+router.put("/:id", async (req, res) => {
   if (req.body.password) {
     req.body.password = CryptoJS.AES.encrypt(
       req.body.password,
@@ -42,7 +42,7 @@ router.put("/:id", authorizeUser, async (req, res) => {
 });
 
 // DELETE
-router.delete("/:id", authorizeUser, async (req, res) => {
+router.delete("/:id", async (req, res) => {
   const _id = req.params.id;
   try {
     await User.findByIdAndDelete(_id);
@@ -53,7 +53,7 @@ router.delete("/:id", authorizeUser, async (req, res) => {
 });
 
 // GET ALL USERS
-router.get("/find", authorizeAdmin, async (req, res) => {
+router.get("/find", async (req, res) => {
   const query = req.query.new;
   try {
     const user = query
@@ -66,7 +66,7 @@ router.get("/find", authorizeAdmin, async (req, res) => {
 });
 
 // GET
-router.get("/find/:id", authorizeAdmin, async (req, res) => {
+router.get("/find/:id", async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
     const { password, ...info } = user._doc;
@@ -77,7 +77,7 @@ router.get("/find/:id", authorizeAdmin, async (req, res) => {
 });
 
 // GET USER STATS
-router.get("/stats", authorizeAdmin, async (req, res) => {
+router.get("/stats", async (req, res) => {
   const date = new Date();
   const lastYear = new Date(date.setFullYear(date.getFullYear - 1));
 

@@ -7,7 +7,7 @@ const {
 } = require("../middlewares/verifyToken");
 
 // CREATE
-router.post("/", verifyToken, async (req, res) => {
+router.post("/", async (req, res) => {
   const newCart = new Cart(req.body);
   try {
     const savedCart = await newCart.save();
@@ -18,7 +18,7 @@ router.post("/", verifyToken, async (req, res) => {
 });
 
 // UPDATE
-router.put("/:id", verifyToken, async (req, res) => {
+router.put("/:id", async (req, res) => {
   try {
     const updatedCart = await Cart.findByIdAndUpdate(
       req.params.id,
@@ -34,7 +34,7 @@ router.put("/:id", verifyToken, async (req, res) => {
 });
 
 // DELETE
-router.delete("/:id", verifyToken, async (req, res) => {
+router.delete("/:id", async (req, res) => {
   const _id = req.params.id;
   try {
     await Cart.findByIdAndDelete(_id);
@@ -45,7 +45,7 @@ router.delete("/:id", verifyToken, async (req, res) => {
 });
 
 // GET ALL
-router.get("/find", authorizeAdmin, async (req, res) => {
+router.get("/find", async (req, res) => {
   try {
     const carts = await Cart.find();
     res.status(200).json(carts);
@@ -55,7 +55,7 @@ router.get("/find", authorizeAdmin, async (req, res) => {
 });
 
 // GET USER CART
-router.get("/find/:userId", authorizeAdmin, async (req, res) => {
+router.get("/find/:userId", async (req, res) => {
   try {
     const cart = await Cart.findOne({ userId: req.params.userId });
     res.status(200).json(cart);

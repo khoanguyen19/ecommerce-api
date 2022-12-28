@@ -3,7 +3,7 @@ const Order = require("../models/Order");
 const { verifyToken, authorizeAdmin } = require("../middlewares/verifyToken");
 
 // CREATE
-router.post("/", verifyToken, async (req, res) => {
+router.post("/", async (req, res) => {
   const userId = req.user.id;
   const clientOrder = req.body;
   const newOrder = new Order({ userId, ...clientOrder });
@@ -16,7 +16,7 @@ router.post("/", verifyToken, async (req, res) => {
 });
 
 // UPDATE
-router.put("/:id", authorizeAdmin, async (req, res) => {
+router.put("/:id", async (req, res) => {
   try {
     const updatedOrder = await Order.findByIdAndUpdate(
       req.params.id,
@@ -32,7 +32,7 @@ router.put("/:id", authorizeAdmin, async (req, res) => {
 });
 
 // DELETE
-router.delete("/:id", authorizeAdmin, async (req, res) => {
+router.delete("/:id", async (req, res) => {
   const _id = req.params.id;
   try {
     await Order.findByIdAndDelete(_id);
@@ -43,7 +43,7 @@ router.delete("/:id", authorizeAdmin, async (req, res) => {
 });
 
 // GET ALL
-router.get("/find", authorizeAdmin, async (req, res) => {
+router.get("/find", async (req, res) => {
   try {
     const orders = await Order.aggregate([
       {
@@ -62,7 +62,7 @@ router.get("/find", authorizeAdmin, async (req, res) => {
 });
 
 // GET USER ORDERS
-router.get("/find/:userId", authorizeAdmin, async (req, res) => {
+router.get("/find/:userId", async (req, res) => {
   try {
     const orders = await Order.find({ userId: req.params.userId });
     res.status(200).json(orders);
@@ -72,7 +72,7 @@ router.get("/find/:userId", authorizeAdmin, async (req, res) => {
 });
 
 // GET INCOME
-router.get("/income", authorizeAdmin, async (req, res) => {
+router.get("/income", async (req, res) => {
   const qYear = req.query.year;
   const productId = req.query.pid;
   const date = new Date();
